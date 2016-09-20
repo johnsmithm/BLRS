@@ -8,16 +8,17 @@ class Screenshot(QWebView):
     def __init__(self):
         self.app = QApplication(sys.argv)
         QWebView.__init__(self)
-	self.resize(2000, 1000)#width, height
-        self._loaded = False
+	#self.resize(width, heigth)#width, height
+	self._loaded = False
         self.loadFinished.connect(self._loadFinished)
 
-    def capture(self, url, output_file):
+    def capture(self, url, output_file,width, heigth):
         self.load(QUrl(url))
         self.wait_load()
         # set to webpage size
         frame = self.page().mainFrame()
-        self.page().setViewportSize(frame.contentsSize())
+        self.page().setViewportSize(QSize(width,heigth))#frame.contentsSize())
+	print frame.contentsSize()
         # render image
         image = QImage(self.page().viewportSize(), QImage.Format_ARGB32)
         painter = QPainter(image)
@@ -36,7 +37,7 @@ class Screenshot(QWebView):
     def _loadFinished(self, result):
         self._loaded = True
 
-s = Screenshot()
-s.capture('https://www.ing.com/en.htm', 'website.png')
-#s.capture('http://webscraping.com/blog', 'blog.png')
-#works
+
+#s = Screenshot(1100,700)
+#s.capture('https://www.ing.com/en.htm', 'website.png')
+
